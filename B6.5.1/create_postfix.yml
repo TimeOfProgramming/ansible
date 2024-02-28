@@ -1,0 +1,30 @@
+- name: установка/Удаление Postfix
+  hosts: your_mail_server
+  become: yes
+  vars:
+    postfix_installed: false
+  tasks:
+    - name: установка Postfix
+      package:
+        name: postfix
+        state: present
+      when: postfix_installed and "'init' in (tags | default([]))"
+
+    - name: удаление Postfix
+      package:
+        name: postfix
+        state: absent
+      when: not postfix_installed and "'drop' in (tags | default([]))"
+
+    - name: запуск Postfix
+      service:
+        name: postfix
+        state: started
+      when: postfix_installed
+
+    - name: остановка и выключение Postfix
+      service:
+        name: postfix
+        state: stopped
+        enabled: no
+      when: not postfix_installed

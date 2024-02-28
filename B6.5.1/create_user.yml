@@ -1,0 +1,25 @@
+- name: Create User with Encrypted SSH Key
+  hosts: my_servers
+  become: true
+
+  tasks:
+    - name: Create user
+      user:
+        name: user1
+        createhome: yes
+
+    - name: Create SSH directory if it doesn't exist
+      file:
+        path: "/home/user1/.ssh"
+        state: directory
+        owner: user1
+        group: user1
+        mode: 0700
+
+    - name: Copy encrypted SSH key to remote server
+      copy:
+        content: "{{ lookup('file', '/home/max/.ssh/id_rsa.pub') }}"
+        dest: /home/user1/.ssh/authorized_keys
+        owner: user1
+        group: user1
+        mode: '0600'
