@@ -1,0 +1,5 @@
+name: настройка nginx и php-fpm
+  hosts: localhost
+  become: yes
+  roles:
+    - nginx_php_role

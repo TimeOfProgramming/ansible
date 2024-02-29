@@ -1,0 +1,5 @@
+- name: dns
+  hosts: lochalhost
+  become: yes
+  roles:
+    - dns_role

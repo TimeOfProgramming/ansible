@@ -1,0 +1,30 @@
+- name: установка nginx и php-fpm
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - nginx
+    - php-fpm
+
+- name: копирование конфигураций nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+  notify: Reload nginx
+
+- name: копирование файла index.php
+  template:
+    src: index.php.j2
+    dest: /opt/nginx/ansible/index.php
+  notify: Reload php-fpm
+
+handlers:
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded
+
+- name: reload php-fpm
+  service:
+    name: php7.4-fpm
+    state: restarted
