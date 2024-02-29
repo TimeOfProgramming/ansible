@@ -1,0 +1,10 @@
+- name: Установка vsftpd
+  apt:
+    name: vsftpd
+    state: present
+
+- name: Запуск vsftpd
+  service:
+    name: vsftpd
+    state: started
+    enabled: yes
