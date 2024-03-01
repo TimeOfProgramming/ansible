@@ -1,0 +1,4 @@
+- name:  добавление нового пользователя с авторизацией по ключу
+  user:
+    name: newuser
+    generate_ssh_key: yes

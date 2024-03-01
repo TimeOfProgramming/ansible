@@ -1,0 +1,22 @@
+- name: установка nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: запуск nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+  
+- name: настройка nginx для отправки php на 9000 порт
+  template:
+    src: php-fpm.conf.j2
+    dest: /etc/nginx/conf.d/php-fpm.conf
+  notify: Reload nginx
+
+handlers:
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded

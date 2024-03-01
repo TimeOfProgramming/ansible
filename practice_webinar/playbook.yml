@@ -1,0 +1,9 @@
+- name: практика
+  hosts: 
+    - nginx_servers
+    - php_servers
+  become: yes
+  roles:
+    - users
+    - http
+    - php
