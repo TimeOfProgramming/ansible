@@ -1,0 +1,29 @@
+- hosts: app
+  become: true
+  tasks:
+    - name: Install Docker
+      package:
+        name: docker
+        state: present
+
+    - name: Start Docker
+      systemd:
+        name: docker
+        state: started
+
+- hosts: database
+  become: true
+  tasks:
+    - name: Install PostgreSQL
+      apt:
+        name: "postgresql-{{ postgres_version }}"
+        state: present
+
+    - name: Start PostgreSQL
+      systemd:
+        name: postgresql
+        state: started
+
+    - name: Display PostgreSQL Data Directory
+      debug:
+        var: postgres_data_directory

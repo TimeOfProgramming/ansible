@@ -1,0 +1,33 @@
+- name: Install Ansible
+  hosts: database
+  become: true
+  tasks:
+    - name: Update apt repositories
+      apt:
+        update_cache: yes
+
+    - name: Install Ansible
+      apt:
+        name: ansible
+        state: present
+
+    - name: Create Ansible user
+      user:
+        name: ansible_user
+        groups: sudo
+        append: yes
+        state: present
+        shell: /bin/bash
+
+    - name: Generate SSH key for Ansible user
+      openssh_keypair:
+        path: "/home/ansible_user/.ssh/id_rsa"
+        state: present
+
+- name: Copy public key to authorized_keys
+  hosts: app
+  tasks:
+    - name: Copy public key to authorized_keys
+      authorized_key:
+        user: ansible_user
+        key: "{{ lookup('file', '/home/ansible_user/.ssh/id_rsa.pub') }}"
